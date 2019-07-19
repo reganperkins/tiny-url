@@ -1,0 +1,21 @@
+{
+  "name": "tiny-url",
+  "version": "1.0.0",
+  "description": "url shorting app",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "js",
+    "express",
+    "node"
+  ],
+  "author": "regan little",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "mocha": "^6.2.0"
+  }
+}
