@@ -3,11 +3,22 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 8080;
+const URLLENGTH = 6;
 
 const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com',
 };
+
+function generateRandomString(x = '') {
+  if (x.length >= URLLENGTH) return x;
+
+  const alphaNumeric = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+  const alphaNumericLength = alphaNumeric.length;
+  const index = Math.floor(Math.random() * Math.max(alphaNumericLength));
+
+  return generateRandomString(`${x}${alphaNumeric[index]}`);
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
