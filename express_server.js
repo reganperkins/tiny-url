@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = 8080;
@@ -22,14 +23,17 @@ function generateRandomString(x = '') {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
 app.get('/urls', (req, res) => {
+  console.log(res)
   const templateVars = {
     urls: urlDatabase,
+    username: req.cookies.username,
   };
   res.render('urls-index', templateVars);
 });
@@ -45,7 +49,10 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/urls/new', (req, res) => {
-  res.render('new-url');
+  const templateVars = {
+    username: req.cookies.username,
+  };
+  res.render('new-url', templateVars);
 });
 
 app.get('/urls/:shortURL', (req, res) => {
@@ -53,6 +60,7 @@ app.get('/urls/:shortURL', (req, res) => {
   const templateVars = {
     shortURL,
     longURL: urlDatabase[shortURL],
+    username: req.cookies.username,
   };
   res.render('show-url', templateVars);
 });
@@ -70,6 +78,17 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 
 app.get('/u/:shortURL', (req, res) => {
   res.redirect(`${urlDatabase[req.params.shortURL]}`);
+});
+
+app.post('/login', (req, res) => {
+  const { username } = req.body;
+  res.cookie('username', username);
+  res.redirect('/urls');
+});
+
+app.post('/logout', (req, res) => {
+  res.clearCookie('username');
+  res.redirect('/urls');
 });
 
 app.listen(PORT, () => {
