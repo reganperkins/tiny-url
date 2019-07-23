@@ -5,22 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <title>TinyURL</title>
+  <title>List - TinyURL</title>
 </head>
 <body>
-  <div>
-    <%- include('partials/_header') %>
-    <ul>
-      <% for (tinyURL in urls) {  %>
-        <li>
-          <%= tinyURL %> -> <a href='<%= urls[tinyURL] %>'><%= urls[tinyURL] %></a>
-          <form class="form-inline" method="POST" action='<%= `/urls/${tinyURL}/delete` %>'>
-            <button type="submit" class="btn btn-primary">Delete</button>
-          </form>
-        </li>
-      <% } %>
-    </ul>
-    <a href="/urls/new" >create new TinyURL</a>
-  </section>
+  <%- include('partials/_header') %>
+  <div style="font-size:20px; padding:10px 50px;">
+    <% for (tinyURL in urls) {  %>
+      <section  class="d-flex mb-3">
+        <div class="p-2">
+          <a href='<%= tinyURL %>'><%= tinyURL %></a> -> <a href='<%= urls[tinyURL] %>'><%= urls[tinyURL] %></a>
+        </div>
+        <form class="p-2 ml-auto" method="POST" action='<%= `/urls/${tinyURL}/delete` %>'>
+          <button type="submit" class="btn btn-outline-danger">Delete</button>
+        </form>
+      </section>
+    <% } %>
+    
+    <a class="btn btn-primary" href="/urls/new">create new TinyURL</a>
+  </div>
 </body>
 </html>

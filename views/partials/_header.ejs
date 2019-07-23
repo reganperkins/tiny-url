@@ -1,22 +1,19 @@
-<div>
+<div style="font-size:20px; padding:20px 50px; background-color: sandybrown;">
   <h1>TinyURL</h1>
 
   <% if (username) { %>
-    <div>
-      <form class="form-inline" method="POST" action="/logout">
-        <div class="form-group mb-2"></div>
-          Logged in as : <%= username %>
-          <button type="submit" class="btn btn-primary">logout</button>
-        </div>
-      </form>
-    </div>
+    Logged in as: <%= username %>
+    <form method="POST" action="/logout">
+      <div class="form-group mb-2"></div>
+        <button type="submit" class="btn btn-primary">logout</button>
+      </div>
+    </form>
   <% } else { %>
     <form class="form-inline" method="POST" action="/login">
       <div class="form-group mb-2"></div>
-        <input class="form-control" type="text" name="username" />
+        <input class="form-control" style="margin-right: 1em;" type="text" name="username" />
         <button type="submit" class="btn btn-primary">login</button>
       </div>
     </form>
   <% } %>
-
-</div>
+  </div>
