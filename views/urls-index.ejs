@@ -12,10 +12,15 @@
     <%- include('partials/_header') %>
     <ul>
       <% for (tinyURL in urls) {  %>
-        <li><%= urls[tinyURL] %> <%= tinyURL %></li>
+        <li>
+          <%= tinyURL %> -> <a href='<%= urls[tinyURL] %>'><%= urls[tinyURL] %></a>
+          <form class="form-inline" method="POST" action='<%= `/urls/${tinyURL}/delete` %>'>
+            <button type="submit" class="btn btn-primary">Delete</button>
+          </form>
+        </li>
       <% } %>
     </ul>
-    <a href="" >create new TinyURL</a>
+    <a href="/urls/new" >create new TinyURL</a>
   </section>
 </body>
 </html>

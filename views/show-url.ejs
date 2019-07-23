@@ -4,16 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>TinyURL</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  <title>Short URL Details - TinyURL</title>
 </head>
 <body>
-  <div>
+  <div style="font-size:20px; padding:50px;">
+
     <%- include('partials/_header') %>
-    <ul>
-      <li><%= longURL %></li>
-      <li><%= shortURL %></li>
-    </ul>
-    <a href="" >create new TinyURL</a>
+
+    <h3>ShortURL: <%= shortURL %></h3>
+
+    <form class="form-inline" method="POST" action='/urls/<%= shortURL %>/'>
+      <div class="form-group mb-2">
+        <input class="form-control" type="text" name="longURL" placeholder='<%= longURL %>' style="width: 300px; margin: 1em"/>
+        <button type="submit" class="btn btn-primary">update</button>
+      </div>
+    </form>
+
+    <a href="/urls/new" >create new TinyURL</a>
+
   </div>
 </body>
 </html>
