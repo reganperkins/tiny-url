@@ -47,10 +47,8 @@ app.get('/', (req, res) => {
 
 app.get('/urls', (req, res) => {
   const templateVars = {
-    // ...users[req.cookies.user_id],
     urls: urlDatabase,
     user: users[req.cookies.user_id] || {},
-    // username: req.cookies.username,
   };
   res.render('urls-index', templateVars);
 });
@@ -67,7 +65,6 @@ app.get('/urls.json', (req, res) => {
 
 app.get('/urls/new', (req, res) => {
   const templateVars = {
-    // username: req.cookies.username,
     user: users[req.cookies.user_id] || {},
   };
   res.render('new-url', templateVars);
@@ -78,7 +75,6 @@ app.get('/urls/:shortURL', (req, res) => {
   const templateVars = {
     shortURL,
     longURL: urlDatabase[shortURL],
-    // username: req.cookies.username,
     user: users[req.cookies.user_id] || {},
   };
   res.render('show-url', templateVars);
@@ -110,21 +106,7 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) => {
   const { email, password } = req.body;
   const emailInUse = findUser('email', email);
-  if (!email || !password) {
-    res.status(400);
-    const templateVars = {
-      user: users[req.cookies.user_id] || {},
-      error: 'you must provide both an email and password',
-    };
-    res.render('register', templateVars);
-  } else if (emailInUse) {
-    res.status(400);
-    const templateVars = {
-      user: users[req.cookies.user_id] || {},
-      error: 'this email has already been used to create an account',
-    };
-    res.render('register', templateVars);
-  } else {
+  if (email && password && !emailInUse) {
     const userId = `user${generateRandomString()}`;
     users[userId] = {
       user_id: userId,
@@ -133,6 +115,13 @@ app.post('/register', (req, res) => {
     };
     res.cookie('user_id', userId);
     res.redirect('/urls');
+  } else {
+    res.status(400);
+    const templateVars = {
+      user: users[req.cookies.user_id] || {},
+      error: emailInUse ? 'this email has already been used to create an account' : 'you must provide both an email and password',
+    };
+    res.render('register', templateVars);
   }
 });
 
@@ -152,7 +141,6 @@ app.post('/login', (req, res) => {
     res.cookie('user_id', user.user_id);
     res.redirect('/urls');
   } else {
-    // error message
     res.status(403);
     const templateVars = {
       user: users[req.cookies.user_id] || {},
