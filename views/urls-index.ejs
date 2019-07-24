@@ -13,7 +13,7 @@
     <% for (tinyURL in urls) {  %>
       <section  class="d-flex mb-3">
         <div class="p-2">
-          <a href='<%= tinyURL %>'><%= tinyURL %></a> -> <a href='<%= urls[tinyURL] %>'><%= urls[tinyURL] %></a>
+          <a href='/urls/<%= tinyURL %>'><%= tinyURL %></a> -> <a href='<%= urls[tinyURL] %>'><%= urls[tinyURL] %></a>
         </div>
         <form class="p-2 ml-auto" method="POST" action='<%= `/urls/${tinyURL}/delete` %>'>
           <button type="submit" class="btn btn-outline-danger">Delete</button>

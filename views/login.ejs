@@ -6,17 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-  <title>Registration Page - TinyURL</title>
+  <title>Login Page - TinyURL</title>
 </head>
 <body>
   <%- include partials/_header %>
   <div style="font-size:20px; padding:50px;">
-    <h3>Create Account</h3>
-    
-    <%= error %>
-    <form method="POST" action='/register'>
-      <div class="form-group mb-2">
+    <h3>Login</h3>
 
+    <%= error %>
+    <form method="POST" action='/login'>
+      <div class="form-group mb-2">
         <label for="email" style="margin-top: 1em;">Email:</label>
         <input class="form-control" type="email" name="email" style="width: 300px; margin: 0 1em 1em 0"/>
 
