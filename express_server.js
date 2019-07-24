@@ -7,15 +7,12 @@ const PORT = 8080;
 const URLLENGTH = 6;
 
 const urlDatabase = {
-  'b2xVn2': 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com',
+  // urlId: { longURL, userId},
 };
 
-// users obj follows this pattern
-// {
-//   user_id: { user_id, email, password }
-// }
-const users = {};
+const users = {
+  // user_id: { user_id, email, password },
+};
 
 function findUser(field, string) {
   for (let userId in users) {
@@ -23,8 +20,18 @@ function findUser(field, string) {
       return users[userId];
     }
   }
-
   return false;
+}
+
+function filteredURLS(userId) {
+  const filteredObj = {};
+  for (let urlId in urlDatabase) {
+    if (urlDatabase[urlId].userId === userId) {
+      filteredObj[urlId] = urlDatabase[urlId];
+    }
+  }
+
+  return filteredObj;
 }
 
 function generateRandomString(x = '') {
@@ -46,16 +53,20 @@ app.get('/', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
+  const loggedInUser = req.cookies.user_id;
   const templateVars = {
-    urls: urlDatabase,
-    user: users[req.cookies.user_id] || {},
+    urls: filteredURLS(loggedInUser),
+    user: users[loggedInUser] || {},
   };
   res.render('urls-index', templateVars);
 });
 
 app.post('/urls', (req, res) => {
   const shortURL = generateRandomString();
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL] = {
+    longURL: req.body.longURL,
+    userId: req.cookies.user_id,
+  };
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -64,17 +75,21 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/urls/new', (req, res) => {
-  const templateVars = {
-    user: users[req.cookies.user_id] || {},
-  };
-  res.render('new-url', templateVars);
+  if (!req.cookies.user_id) {
+    res.redirect('/login');
+  } else {
+    const templateVars = {
+      user: users[req.cookies.user_id] || {},
+    };
+    res.render('new-url', templateVars);
+  }
 });
 
 app.get('/urls/:shortURL', (req, res) => {
   const { shortURL } = req.params;
   const templateVars = {
     shortURL,
-    longURL: urlDatabase[shortURL],
+    longURL: urlDatabase[shortURL].longURL,
     user: users[req.cookies.user_id] || {},
   };
   res.render('show-url', templateVars);
@@ -83,7 +98,7 @@ app.get('/urls/:shortURL', (req, res) => {
 app.post('/urls/:shortURL', (req, res) => {
   const { shortURL } = req.params;
   const { longURL } = req.body;
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL].longURL = longURL;
 });
 
 app.post('/urls/:shortURL/delete', (req, res) => {

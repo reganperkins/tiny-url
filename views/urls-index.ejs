@@ -10,18 +10,26 @@
 <body>
   <%- include('partials/_header') %>
   <div style="font-size:20px; padding:10px 50px;">
-    <% for (tinyURL in urls) {  %>
-      <section  class="d-flex mb-3">
-        <div class="p-2">
-          <a href='/urls/<%= tinyURL %>'><%= tinyURL %></a> -> <a href='<%= urls[tinyURL] %>'><%= urls[tinyURL] %></a>
-        </div>
-        <form class="p-2 ml-auto" method="POST" action='<%= `/urls/${tinyURL}/delete` %>'>
-          <button type="submit" class="btn btn-outline-danger">Delete</button>
-        </form>
-      </section>
+    <% if (user.user_id) { %>
+      <% for (tinyURL in urls) {  %>
+        <section  class="d-flex mb-3">
+          <div class="p-2">
+            <a href='/urls/<%= tinyURL %>'><%= tinyURL %></a> -> <a href='<%= urls[tinyURL].longURL %>'><%= urls[tinyURL].longURL %></a>
+          </div>
+          <form class="p-2 ml-auto" method="POST" action='<%= `/urls/${tinyURL}/delete` %>'>
+            <button type="submit" class="btn btn-outline-danger">Delete</button>
+          </form>
+        </section>
+      <% } %>
+      <a class="btn btn-primary" href="/urls/new">create new TinyURL</a>
+      <!--
+        <% if (user.user_id) { %>
+          <a class="btn btn-primary" href="/urls/new">create new TinyURL</a>
+        <% } %> 
+      -->
+    <% } else { %>
+      <h3>Login or register to start with TinyURL</h3>
     <% } %>
-    
-    <a class="btn btn-primary" href="/urls/new">create new TinyURL</a>
   </div>
 </body>
 </html>
