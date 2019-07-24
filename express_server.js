@@ -86,14 +86,28 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.get('/urls/:shortURL', (req, res) => {
+  const loggedInUser = req.cookies.user_id;
   const { shortURL } = req.params;
+  const userOwnsContent = urlDatabase[shortURL] && urlDatabase[shortURL].userId === loggedInUser;
   const templateVars = {
     shortURL,
-    longURL: urlDatabase[shortURL].longURL,
-    user: users[req.cookies.user_id] || {},
+    longURL: urlDatabase[shortURL] && urlDatabase[shortURL].longURL,
+    user: users[loggedInUser] || {},
+    loggedIn: !!loggedInUser,
+    userOwnsContent,
   };
   res.render('show-url', templateVars);
 });
+
+// app.get('/urls/:shortURL', (req, res) => {
+//   const { shortURL } = req.params;
+//   const templateVars = {
+//     shortURL,
+//     longURL: urlDatabase[shortURL].longURL,
+//     user: users[req.cookies.user_id] || {},
+//   };
+//   res.render('show-url', templateVars);
+// });
 
 app.post('/urls/:shortURL', (req, res) => {
   const { shortURL } = req.params;

@@ -12,17 +12,23 @@
   <%- include('partials/_header') %>
   <div style="font-size:20px; padding:50px;">
 
-    <h3>ShortURL: <%= shortURL %></h3>
+    <% if (userOwnsContent) { %>
+      <h3>ShortURL: <%= shortURL %></h3>
 
-    <form class="form-inline" method="POST" action='/urls/<%= shortURL %>/'>
-      <div class="form-group mb-2">
-        <input class="form-control" type="text" name="longURL" placeholder='<%= longURL %>' style="width: 300px; margin: 1em 1em 1em 0"/>
-        <button type="submit" class="btn btn-primary">update</button>
-      </div>
-    </form>
+      <form class="form-inline" method="POST" action='/urls/<%= shortURL %>/'>
+        <div class="form-group mb-2">
+          <input class="form-control" type="text" name="longURL" placeholder='<%= longURL %>' style="width: 300px; margin: 1em 1em 1em 0"/>
+          <button type="submit" class="btn btn-primary">update</button>
+        </div>
+      </form>
 
-    <a class="btn btn-outline-primary" href="/urls/" >view url list</a>
-
+      <a class="btn btn-outline-primary" href="/urls/" >view url list</a>
+    <% } else if (!loggedIn) { %>
+      <h3>You must login or register to view this content</h3>
+    <% } else { %>
+      <h3>Sorry this content does not appear to belong to you</h3>
+      <a class="btn btn-outline-primary" href="/urls/" >view url list</a>
+    <% } %>
   </div>
 </body>
 </html>
