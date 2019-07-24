@@ -11,6 +11,8 @@ const urlDatabase = {
   '9sm5xK': 'http://www.google.com',
 };
 
+const users = {};
+
 function generateRandomString(x = '') {
   if (x.length >= URLLENGTH) return x;
 
@@ -77,6 +79,24 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 
 app.get('/u/:shortURL', (req, res) => {
   res.redirect(`${urlDatabase[req.params.shortURL]}`);
+});
+
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+app.post('/register', (req, res) => {
+  // console.log(req, res);
+  const { email, password } = req.body;
+  const id = `user${generateRandomString()}`;
+  users[id] = {
+    id,
+    email,
+    password,
+  };
+  res.cookie('user_id', id);
+  console.log(users)
+  res.redirect('/urls');
 });
 
 app.post('/login', (req, res) => {
