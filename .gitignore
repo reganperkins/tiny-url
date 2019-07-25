@@ -1,4 +1,11 @@
+# private keys
+.env
 
-node_modules
+.DS_Store
 
-.DS_store
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
