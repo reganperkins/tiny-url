@@ -10,7 +10,7 @@
 <body>
   <%- include('partials/_header') %>
   <div style="font-size:20px; padding:10px 50px;">
-    <% if (user.user_id) { %>
+    <% if (user.userId) { %>
       <% for (tinyURL in urls) {  %>
         <section  class="d-flex mb-3">
           <div class="p-2">
@@ -22,11 +22,6 @@
         </section>
       <% } %>
       <a class="btn btn-primary" href="/urls/new">create new TinyURL</a>
-      <!--
-        <% if (user.user_id) { %>
-          <a class="btn btn-primary" href="/urls/new">create new TinyURL</a>
-        <% } %> 
-      -->
     <% } else { %>
       <h3>Login or register to start with TinyURL</h3>
     <% } %>
