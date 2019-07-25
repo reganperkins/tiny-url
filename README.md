@@ -4,6 +4,7 @@ TinyUrl is a URL shorting web app built with Node and Express. It uses encrypted
 
 ## Getting Started
 
-make sure to add a .env file with `SESSION_SECRET_KEY` that can be any string for encrypting and decrypting with the 'cookie-session' library
-run the program with `npm start`
+- make sure to add a .env file with `SESSION_SECRET_KEY` that can be any string for encrypting and decrypting with the 'cookie-session' library
+- install all dependencies with `npm i`
+- run the program with `npm start`
 
