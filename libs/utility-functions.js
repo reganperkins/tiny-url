@@ -11,6 +11,15 @@ function findUser(field, string) {
   return false;
 }
 
+function getURLOwnerId(shortURL) {
+  for (let urlId in urlDatabase) {
+    if (urlId === shortURL) {
+      return urlDatabase[urlId].userId;
+    }
+  }
+  return false;
+}
+
 function urlsForUser(userId) {
   const urls = {};
   for (let urlId in urlDatabase) {
@@ -34,6 +43,7 @@ function generateRandomString(x = '') {
 
 module.exports = {
   findUser,
+  getURLOwnerId,
   urlsForUser,
   generateRandomString,
 };

@@ -1,16 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
+const methodOverride = require('method-override');
 const bcrypt = require('bcrypt');
-const { findUser, urlsForUser, generateRandomString } = require('./libs/utility-functions');
+const { findUser, getURLOwnerId, urlsForUser, generateRandomString } = require('./libs/utility-functions');
 const { urlDatabase, usersDatabase } = require('./libs/database');
 require('dotenv').config();
 
 const app = express();
 const PORT = 8080;
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+app.use(methodOverride('_method'));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({ secret: process.env.SESSION_SECRET_KEY }));
 
 app.get('/', (req, res) => {
@@ -64,20 +66,20 @@ app.get('/urls/:shortURL', (req, res) => {
   res.render('show-url', templateVars);
 });
 
-app.post('/urls/:shortURL', (req, res) => {
+app.put('/urls/:shortURL', (req, res) => {
   const { shortURL } = req.params;
   const { longURL } = req.body;
-  const postOwner = findUser('shortURL', shortURL);
-  if (postOwner && postOwner.userId === req.session.user_id) {
+  const postOwner = getURLOwnerId(shortURL);
+  if (postOwner && postOwner === req.session.user_id) {
     urlDatabase[shortURL].longURL = longURL;
   } else {
     res.status(401);
   }
 });
 
-app.post('/urls/:shortURL/delete', (req, res) => {
-  const postOwner = findUser('shortURL', req.params.shortURL);
-  if (postOwner && postOwner.userId === req.session.user_id) {
+app.delete('/urls/:shortURL/delete', (req, res) => {
+  const postOwner = getURLOwnerId(req.params.shortURL);
+  if (postOwner && postOwner === req.session.user_id) {
     delete urlDatabase[req.params.shortURL];
     res.redirect('/urls');
   } else {
