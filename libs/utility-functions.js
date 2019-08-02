@@ -2,7 +2,7 @@ const { usersDatabase, urlDatabase } = require('./database');
 
 const URL_LENGTH = 6;
 
-function findUser(field, string) {
+function getUserFromMatchingField(field, string) {
   for (let userId in usersDatabase) {
     if (usersDatabase[userId][field] === string) {
       return usersDatabase[userId];
@@ -20,7 +20,7 @@ function getURLOwnerId(shortURL) {
   return false;
 }
 
-function urlsForUser(userId) {
+function getUrlsObjectForUser(userId) {
   const urls = {};
   for (let urlId in urlDatabase) {
     if (urlDatabase[urlId].userId === userId) {
@@ -31,19 +31,19 @@ function urlsForUser(userId) {
   return urls;
 }
 
-function generateRandomString(x = '') {
-  if (x.length >= URL_LENGTH) return x;
+function generateRandomString(generatedString = '') {
+  if (generatedString.length >= URL_LENGTH) return generatedString;
 
   const alphaNumeric = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
   const alphaNumericLength = alphaNumeric.length;
   const index = Math.floor(Math.random() * Math.max(alphaNumericLength));
 
-  return generateRandomString(`${x}${alphaNumeric[index]}`);
+  return generateRandomString(`${generatedString}${alphaNumeric[index]}`);
 }
 
 module.exports = {
-  findUser,
+  getUserFromMatchingField,
   getURLOwnerId,
-  urlsForUser,
+  getUrlsObjectForUser,
   generateRandomString,
 };

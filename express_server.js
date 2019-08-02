@@ -3,8 +3,13 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const methodOverride = require('method-override');
 const bcrypt = require('bcrypt');
-const { findUser, getURLOwnerId, urlsForUser, generateRandomString } = require('./libs/utility-functions');
 const { urlDatabase, usersDatabase } = require('./libs/database');
+const {
+  getUserFromMatchingField,
+  getURLOwnerId,
+  getUrlsObjectForUser,
+  generateRandomString,
+} = require('./libs/utility-functions');
 require('dotenv').config();
 
 const app = express();
@@ -22,7 +27,7 @@ app.get('/', (req, res) => {
 app.get('/urls', (req, res) => {
   const loggedInUser = req.session.user_id;
   const templateVars = {
-    urls: urlsForUser(loggedInUser),
+    urls: getUrlsObjectForUser(loggedInUser),
     user: usersDatabase[loggedInUser] || {},
   };
   res.render('urls-index', templateVars);
@@ -107,7 +112,7 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { email, password } = req.body;
-  const emailInUse = findUser('email', email);
+  const emailInUse = getUserFromMatchingField('email', email);
   if (email && password && !emailInUse) {
     const userId = `user${generateRandomString()}`;
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -139,7 +144,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-  const user = findUser('email', email);
+  const user = getUserFromMatchingField('email', email);
   if (user && bcrypt.compareSync(password, user.password)) {
     req.session.user_id = user.userId;
     res.redirect('/urls');
